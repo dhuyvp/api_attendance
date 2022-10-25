@@ -11,17 +11,24 @@ type Response struct {
 	Data       interface{} `json:"data"`
 }
 
-func ConvertToInt(x byte, y byte) int {
-	result := int(x-'0')*10 + int(y-'0')
-	return result
-}
-
-func CheckAttendance(LastDate string) bool {
+func CheckAttendance(LastDate string) int {
 	timeInsert := time.Now()
-	str := timeInsert.Format("2006-01-02 15:04:05")
+	InsertFormat := timeInsert.Format("2006-01-02 15:04:05")
 
-	val := ConvertToInt(LastDate[8], LastDate[9])
-	newVal := ConvertToInt(str[8], str[9])
+	tmp := timeInsert.AddDate(0, 0, -1)
+	str := tmp.Format("2006-01-02 15:04:05")
 
-	return (newVal-val >= 0 && newVal-val < 2)
+	valLastDay := LastDate[:10]    // LastInsertDate
+	newValDay := str[:10]          // Date after add -1 day
+	valInsert := InsertFormat[:10] // Date now
+
+	if valInsert == valLastDay {
+		return 0
+	}
+
+	if newValDay == valLastDay {
+		return 1
+	}
+
+	return 2
 }

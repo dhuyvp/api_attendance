@@ -10,8 +10,11 @@ import (
 func PublicRoutes(app *fiber.App, db *sqlx.DB) {
 	route := app.Group("/api")
 
-	route.Post("/insert", controllers.InsertUser(db))
-	route.Get("/select", controllers.SelectUser(db, 1))
+	var idSelect int = 1
+	var idInsert int = 1
+
+	route.Post("/insert", controllers.InsertUser(db, idInsert))
+	route.Get("/select", controllers.SelectUser(db, idSelect))
 	route.Get("", func(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).SendString("Successfull!")
 	})
